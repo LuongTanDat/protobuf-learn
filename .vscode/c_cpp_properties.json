@@ -5,14 +5,16 @@
             "includePath": [
                 "/usr/include/**",
                 "/usr/local/include/**",
-                "./protoc/**",
+                "./proto2/protoc/**",
+                "./proto3/protoc/**",
                 "./**"
             ],
             "browse": {
                 "path": [
                     "/usr/include/**",
                     "/usr/local/include/**",
-                    "./protoc/**",
+                    "./proto2/protoc/**",
+                    "./proto3/protoc/**",
                     "./**"
                 ],
                 "limitSymbolsToIncludedHeaders": false
