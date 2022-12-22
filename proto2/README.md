@@ -27,9 +27,9 @@ package PERSON;
 
 message Person
 {
-    string name = 1;
-    int32 id = 2;
-    string name = 3;
+    optional string name = 1;
+    optional int32 id = 2;
+    optional string name = 3;
 }
 ```
 
@@ -101,5 +101,7 @@ make
 ## Packages
 
 - In [person2.proto](protoc/person2.proto), we can import Date message from [date_pkg.proto](protoc/date_pkg.proto)
+
+- But you have to notice that, you have to import consistent package name.
 
 - Let's see some [C++ code](main.cpp#L131) and [`.proto` file](protoc/person2.proto)
