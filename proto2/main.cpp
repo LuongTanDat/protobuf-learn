@@ -18,7 +18,7 @@ int main(int argc, char **argv)
     // example2();
     // example3();
     date::module::Person person = example4();
-    std::cout << "[ DEBUG ]: \n" << person.DebugString() << std::endl; // Error date::module::Date date was deallocated
+    std::cout << "[ DEBUG ]: \n" << person.DebugString() << std::endl;
 
     return EXIT_SUCCESS;
 }
@@ -137,7 +137,7 @@ date::module::Person example4()
     date.set_day(28);
     date.set_month(6);
     date.set_year(2002);
-    person01.set_allocated_birthday(&date);
+    *person01.mutable_birthday() = date;
     person01.set_age(20);
     person01.set_id(20010001);
     std::cout << "[ DEBUG ]: \n" << person01.DebugString() << std::endl;
