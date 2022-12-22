@@ -1,0 +1,10 @@
+// date_pkg.proto
+syntax = "proto3";
+
+package date.module;
+
+message Date {
+    int32 year = 1;
+    int32 month = 2;
+    int32 day = 3;
+}

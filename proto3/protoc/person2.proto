@@ -1,0 +1,13 @@
+// person.proto
+syntax = "proto3";
+
+package date.module;
+
+import "date_pkg.proto";  // fully qualified path of .proto message
+
+message Person
+{
+    Date birthday=1; //!!!!!
+    int32 age=2;
+    int32 id=3;
+}
