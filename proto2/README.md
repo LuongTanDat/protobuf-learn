@@ -21,7 +21,7 @@ libprotoc 3.17.1
 
 ```
 // person.proto
-syntax = "proto3";
+syntax = "proto2";
 
 package PERSON;
 
@@ -47,7 +47,7 @@ message Person
 ## Compile `.proto` file
 
 ```bash
-protoc -I=./protoc --cpp_out=./protoc message.proto
+protoc -I=./protoc --cpp_out=./protoc person.proto
 # if you are in the SRC_DIR or working directory, you can execute with fallowing cmd.
 # protoc -I=./ --cpp_out=./ message.proto
 # This generates the following files in your specified destination directory:
@@ -55,13 +55,51 @@ protoc -I=./protoc --cpp_out=./protoc message.proto
 # 2. message.pb.h
 ```
 
-## C++ code
+## C++ code example
 
-- Let's see some [C++ code](main.cpp)
+- Let's see some [C++ code](main.cpp#L26)
 
 - Compile
+
+`g++`
 
 ```bash
 g++ -std=c++2a -I /usr/local/include -I ./protoc -L /usr/lib/x86_64-linux-gnu/ main.cpp ./protoc/message.pb.cc -lprotobuf -pthread -o app
 ./app
 ```
+
+`Cmake`
+
+```bash
+cmake ..
+make
+./app
+```
+
+# Protobuf
+
+## `.proto` file & API’s
+
+- Let's see some [C++ code](main.cpp#L26) and [`.proto` file](protoc/person.proto)
+
+## Repeated Fields (Arrays or List)
+
+- Repeated modifier allow us to create dynamic sized arrays or list,.
+
+- Let's see some [C++ code](main.cpp#L62) and [`.proto` file](protoc/address_book.proto)
+
+## ENUM (Enumeration)
+
+- We can use Enums if we know all the values a field can take.
+
+- Enum must start by tag `0`.
+
+- The first value of enum is the default value (**tag 0**), even if we do not initialise the enum field default value(**tag 0**) will be initlised.
+
+- Let's see some [C++ code](main.cpp#L113) and [`.proto` file](protoc/phone_type.proto)
+
+## Packages
+
+- In [person2.proto](protoc/person2.proto), we can import Date message from [date_pkg.proto](protoc/date_pkg.proto)
+
+- Let's see some [C++ code](main.cpp#L131) and [`.proto` file](protoc/person2.proto)

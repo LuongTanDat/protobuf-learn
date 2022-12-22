@@ -1,0 +1,11 @@
+// date_pkg.proto
+syntax = "proto2";
+
+package date.module;   //date.pkg is the package name
+
+message Date
+{
+    optional int32 year=1;
+    optional int32 month=2;
+    optional int32 day=3;
+}
