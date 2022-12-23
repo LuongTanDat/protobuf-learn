@@ -1,20 +1,5 @@
 # [Protocol Buffers In C++](https://medium.com/geekculture/protocol-buffers-in-c-d60865ae7782)
 
-## Install PROTOC compiler
-
-- Mac: `brew install protobuf`
-
-- Ubuntu : `sudo apt install protobuf-compiler`
-
-- Windows: [link](https://www.geeksforgeeks.org/how-to-install-protocol-buffers-on-windows/)
-
-> Check if it works
-
-```bash
-$ protoc --version
-libprotoc 3.17.1
-```
-
 ## Defining Protocol Format (message)
 
 - The definitions in a `.proto` the file is simple: you add a message for each data structure you want to serialize, then specify a name and a type for each field in the message.
@@ -48,6 +33,7 @@ message Person
 
 ```bash
 protoc -I=./protoc --cpp_out=./protoc person.proto
+find . -name "*.proto" -type f -exec protoc -I=./protoc --cpp_out=./protoc {} \;
 # if you are in the SRC_DIR or working directory, you can execute with fallowing cmd.
 # protoc -I=./ --cpp_out=./ message.proto
 # This generates the following files in your specified destination directory:
@@ -80,13 +66,13 @@ make
 
 ## `.proto` file & API’s
 
-- Let's see some [C++ code](main.cpp#L26) and [`.proto` file](protoc/person.proto)
+- Let's see some [C++ code](main.cpp#L35) and [`.proto` file](protoc/person.proto)
 
 ## Repeated Fields (Arrays or List)
 
 - Repeated modifier allow us to create dynamic sized arrays or list,.
 
-- Let's see some [C++ code](main.cpp#L62) and [`.proto` file](protoc/address_book.proto)
+- Let's see some [C++ code](main.cpp#L64) and [`.proto` file](protoc/address_book.proto)
 
 ## ENUM (Enumeration)
 
@@ -96,10 +82,16 @@ make
 
 - The first value of enum is the default value (**tag 0**), even if we do not initialise the enum field default value(**tag 0**) will be initlised.
 
-- Let's see some [C++ code](main.cpp#L113) and [`.proto` file](protoc/phone_type.proto)
+- Let's see some [C++ code](main.cpp#L115) and [`.proto` file](protoc/phone_type.proto)
 
 ## Packages
 
 - In [person2.proto](protoc/person2.proto), we can import Date message from [date_pkg.proto](protoc/date_pkg.proto)
 
-- Let's see some [C++ code](main.cpp#L131) and [`.proto` file](protoc/person2.proto)
+- Let's see some [C++ code](main.cpp#L133) and [`.proto` file](protoc/person2.proto)
+
+## Leimao example
+
+- [Reference](https://github.com/leimao/Protocol-Buffer-Examples)
+
+- Let's see [example 5](main.cpp#L149)

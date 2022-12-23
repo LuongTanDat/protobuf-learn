@@ -1,20 +1,5 @@
 # [Protocol Buffers In C++](https://medium.com/geekculture/protocol-buffers-in-c-d60865ae7782)
 
-## Install PROTOC compiler
-
-- Mac: `brew install protobuf`
-
-- Ubuntu : `sudo apt install protobuf-compiler`
-
-- Windows: [link](https://www.geeksforgeeks.org/how-to-install-protocol-buffers-on-windows/)
-
-> Check if it works
-
-```bash
-$ protoc --version
-libprotoc 3.17.1
-```
-
 ## Defining Protocol Format (message)
 
 - The definitions in a `.proto` the file is simple: you add a message for each data structure you want to serialize, then specify a name and a type for each field in the message.
@@ -48,6 +33,7 @@ message Person
 
 ```bash
 protoc -I=./protoc --cpp_out=./protoc person.proto
+find . -name "*.proto" -type f -exec protoc -I=./protoc --cpp_out=./protoc {} \;
 # if you are in the SRC_DIR or working directory, you can execute with fallowing cmd.
 # protoc -I=./ --cpp_out=./ message.proto
 # This generates the following files in your specified destination directory:
