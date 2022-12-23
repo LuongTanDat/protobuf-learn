@@ -13,7 +13,7 @@
 
 ### Install from source code
 
-```
+```bash
 wget https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protobuf-all-21.12.tar.gz
 tar -xf protobuf-all-21.12.tar.gz
 cd protobuf-21.12

@@ -6,6 +6,7 @@
 #include <fstream>
 #include <google/protobuf/util/time_util.h>
 #include <iostream>
+#include <sstream>
 
 PERSON::Person example1();
 
@@ -28,29 +29,22 @@ int main(int argc, char **argv)
     LEIMAO_ADDRESSBOOK::AddressBook addressbook = example5();
     // std::cout << "[ DEBUG ]: \n" << addressbook.DebugString() << std::endl;
 
-    // Write the new address book back to disk.
-    std::fstream ofs_addressbook("data.pb", std::ios::out | std::ios::trunc | std::ios::binary);
-    if (!addressbook.SerializeToOstream(&ofs_addressbook))
-        std::cerr << "[ ERROR ] Failed to write address book." << std::endl;
-    else
-        std::cout << "[ OK ] Success to write address book." << std::endl;
+    std::ostringstream oss;
+    addressbook.SerializeToOstream(&oss);
+    std::string text = oss.str();
+    const char *ctext = text.c_str();
 
-    // Reads the entire address book from a file and prints all the information inside.
-    // Read the existing address book.
-    // std::fstream ifs_addressbook("data.pb", std::ios::in | std::ios::binary);
-    std::ifstream ifs_addressbook("data.pb");
+    std::string text2{ctext};
+    std::istringstream iss(text2);
+
     LEIMAO_ADDRESSBOOK::AddressBook addressbook_stream;
-    if (!addressbook_stream.ParseFromIstream(&ifs_addressbook))
-        std::cerr << "[ ERROR ] Failed to parse address book." << std::endl;
+
+    if (!addressbook_stream.ParseFromIstream(&iss))
+        std::cerr << "[ ERROR ] Failed to parse ::addressbook." << std::endl;
     else
-        std::cout << "[ OK ] Success to parse address book." << std::endl;
+        std::cout << "[ OK ] Success to parse ::addressbook." << std::endl;
 
     std::cout << "[ PARSE ][ FROM_ISTREAM ]: " << addressbook_stream.DebugString() << std::endl;
-
-    LEIMAO_ADDRESSBOOK::AddressBook addressbook_from_string;
-    std::string data_string = addressbook.SerializeAsString();
-    addressbook_from_string.ParseFromString(data_string);
-    std::cout << "[ PARSE ][ FROM_STRING ]: " << addressbook_from_string.DebugString() << std::endl;
 
     // Optional:  Delete all global objects allocated by libprotobuf.
     google::protobuf::ShutdownProtobufLibrary();

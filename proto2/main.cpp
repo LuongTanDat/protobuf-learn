@@ -2,7 +2,9 @@
 #include "person.pb.h"
 #include "person2.pb.h"
 #include "phone_type.pb.h"
+#include <fstream>
 #include <iostream>
+#include <sstream>
 
 PERSON::Person example1();
 
@@ -14,11 +16,32 @@ date::module::Person example4();
 
 int main(int argc, char **argv)
 {
-    example1();
-    example2();
-    example3();
+    // example1();
+    // example2();
+    // example3();
     date::module::Person person = example4();
-    std::cout << "[ DEBUG ]: \n" << person.DebugString() << std::endl;
+    // std::cout << "[ DEBUG ]: \n" << person.DebugString() << std::endl;
+
+    // Write the new ::person back to disk.
+    std::fstream ofs_person("data.pb", std::ios::out | std::ios::trunc | std::ios::binary);
+    if (!person.SerializeToOstream(&ofs_person))
+        std::cerr << "[ ERROR ] Failed to write ::person." << std::endl;
+    else
+        std::cout << "[ OK ] Success to write ::person." << std::endl;
+    ofs_person.close();
+
+    // Reads the entire ::person from a file and prints all the information inside.
+    // Read the existing ::person.
+    std::fstream ifs_person("data.pb", std::ios::in);
+    // std::ifstream ifs_person("data.pb");
+    date::module::Person person_stream;
+    if (!person_stream.ParseFromIstream(&ifs_person))
+        std::cerr << "[ ERROR ] Failed to parse ::person." << std::endl;
+    else
+        std::cout << "[ OK ] Success to parse ::person." << std::endl;
+    ifs_person.close();
+
+    std::cout << "[ PARSE ][ FROM_ISTREAM ]: " << person_stream.DebugString() << std::endl;
 
     // Optional:  Delete all global objects allocated by libprotobuf.
     google::protobuf::ShutdownProtobufLibrary();

@@ -91,3 +91,254 @@ make
 - But you have to notice that, you have to import consistent package name.
 
 - Let's see some [C++ code](main.cpp#L131) and [`.proto` file](protoc/person2.proto)
+
+## Compound Data Types
+
+- There are two more compound data types which may be useful for complicated use cases. They are `OneOf` and `Any`. In this chapter, we will see how to use these two data types of Protobuf.
+
+### OneOf
+
+- We pass a few parameters to this `OneOf` data type and Protobuf ensures that only one of them is set. If we set one of them and try to set the other one, the first attribute gets reset.
+
+<details>
+    <summary>Protobuf Map example!</summary>
+
+```c++
+syntax = "proto3";
+package theater;
+
+message Theater
+{
+    string name = 1;
+    string address = 2;
+    
+    repeated google.protobuf.Any peopleInside = 3;
+    
+    oneof availableEmployees
+    {
+        int32 count = 4;
+        string errorLog = 5;
+    }
+}
+```
+
+```
+name: "SilverScreen"
+peopleInside {
+    type_url: "type.googleapis.com/theater.Employee"
+    value: "\n\004John"
+}
+peopleInside {
+    type_url: "type.googleapis.com/theater.Viewer"
+    value: "\n\004Jane\020\036"
+}
+peopleInside {
+    type_url: "type.googleapis.com/theater.Employee"
+    value: "\n\005Simon"
+}
+peopleInside {
+    type_url: "type.googleapis.com/theater.Viewer"
+    value: "\n\006Janice\020\031"
+}
+```
+
+</details>
+
+### Any
+
+- The next data type that can be of use for complicated uses cases is Any. We can pass any type/message/class to this data type and Protobuf would not complain.
+
+<details>
+    <summary>Protobuf Any example!</summary>
+
+```c++
+syntax = "proto3";
+package theater;
+
+import "google/protobuf/any.proto";
+
+message Theater
+{
+    string name = 1;
+    string address = 2;
+    repeated google.protobuf.Any peopleInside = 3;
+}
+
+message Employee
+{
+    string name = 1;
+    string address = 2;
+}
+
+message Viewer
+{
+    string name = 1;
+    int32 age = 2;
+    string sex = 3;
+}
+```
+
+```
+name: "SilverScreen"
+peopleInside {
+    type_url: "type.googleapis.com/theater.Employee"
+    value: "\n\004John"
+}
+peopleInside {
+    type_url: "type.googleapis.com/theater.Viewer"
+    value: "\n\004Jane\020\036"
+}
+peopleInside {
+    type_url: "type.googleapis.com/theater.Employee"
+    value: "\n\005Simon"
+}
+peopleInside {
+    type_url: "type.googleapis.com/theater.Viewer"
+    value: "\n\006Janice\020\031"
+}
+```
+
+</details>
+
+## Map
+
+- Map is one of the composite datatypes of Protobuf.
+
+<details>
+    <summary>Protobuf Map example!</summary>
+
+```c++
+syntax = "proto3";
+package theater;
+
+message Theater
+{
+    map<string, int32> movieTicketPrice = 9;
+}
+```
+
+```
+movieTicketPrice {
+    key: "Avengers Endgame"
+    value: 700
+}
+movieTicketPrice {
+    key: "Captain America"
+    value: 200
+}
+movieTicketPrice {
+    key: "Wonder Woman 1984"
+    value: 400
+}
+```
+</details>
+
+## Serialize
+
+### output to String
+
+<details>
+    <summary>Protobuf Serialize example!</summary>
+
+- Serialize
+
+```c++
+date::module::Person person = example4();
+std::string data_string = person.SerializeAsString();
+```
+
+- Deserialize
+
+```c++
+date::module::Person person_from_string;
+person_from_string.ParseFromString(data_string);
+std::cout << "[ PARSE ][ FROM_STRING ]: " << person_from_string.DebugString() << std::endl;
+```
+
+</details>
+
+### output to File
+
+<details>
+    <summary>Protobuf Serialize example!</summary>
+
+- Serialize
+
+```c++
+date::module::Person person = example4();
+
+// Write the new ::person back to disk.
+std::fstream ofs_person("data.pb", std::ios::out | std::ios::trunc | std::ios::binary);
+if (!person.SerializeToOstream(&ofs_person))
+    std::cerr << "[ ERROR ] Failed to write ::person." << std::endl;
+else
+    std::cout << "[ OK ] Success to write ::person." << std::endl;
+
+ofs_person.close();
+```
+
+- Deserialize
+
+```c++
+// Reads the entire ::person from a file and prints all the information inside.
+// Read the existing ::person.
+std::fstream ifs_person("data.pb", std::ios::in | std::ios::binary);
+// std::ifstream ifs_person("data.pb");
+date::module::Person person_stream;
+if (!person_stream.ParseFromIstream(&ifs_person))
+    std::cerr << "[ ERROR ] Failed to parse ::person." << std::endl;
+else
+    std::cout << "[ OK ] Success to parse ::person." << std::endl;
+
+ifs_person.close();
+std::cout << "[ PARSE ][ FROM_ISTREAM ]: " << person_stream.DebugString() << std::endl;
+```
+
+</details>
+
+### Ouput to `char*`
+
+<details>
+    <summary>Protobuf Serialize example!</summary>
+
+- Serialize
+
+```c++
+date::module::Person person = example4();
+
+size_t size = person.ByteSizeLong();
+void *buffer = malloc(size);
+person.SerializeToArray(buffer, size);
+```
+
+```c++
+std::ostringstream oss;
+person.SerializeToOstream(&oss);
+std::string text = oss.str();
+const char *ctext = text.c_str();
+```
+
+- Deserialize
+
+```c++
+date::module::Person person_from_array;
+
+person_from_array.ParseFromArray(buffer, size);
+std::cout << "[ PARSE ][ FROM_ARRAY ]: " << person_from_array.DebugString() << std::endl;
+```
+
+```c++
+std::string text2{ctext};
+std::istringstream iss(text2);
+
+date::module::Person person_stream;
+
+if (!person_stream.ParseFromIstream(&iss))
+    std::cerr << "[ ERROR ] Failed to parse ::person." << std::endl;
+else
+    std::cout << "[ OK ] Success to parse ::person." << std::endl;
+
+std::cout << "[ PARSE ][ FROM_ISTREAM ]: " << person_stream.DebugString() << std::endl;
+```
+
+</details>
