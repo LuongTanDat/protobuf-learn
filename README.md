@@ -31,6 +31,12 @@ sudo ldconfig
 
 https://github.com/leimao/Protocol-Buffer-Examples/blob/master/docker/protobuf.Dockerfile
 
+### Python
+
+```bash
+python3 -m pip install protobuf
+```
+
 > Check if it works
 
 ```bash

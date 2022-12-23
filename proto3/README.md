@@ -31,6 +31,8 @@ message Person
 
 ## Compile `.proto` file
 
+- `C++`
+
 ```bash
 protoc -I=./protoc --cpp_out=./protoc person.proto
 find . -name "*.proto" -type f -exec protoc -I=./protoc --cpp_out=./protoc {} \;
@@ -39,6 +41,13 @@ find . -name "*.proto" -type f -exec protoc -I=./protoc --cpp_out=./protoc {} \;
 # This generates the following files in your specified destination directory:
 # 1. message.pb.cc
 # 2. message.pb.h
+```
+
+- Python
+
+```bash
+protoc -I=./protoc --python_out=./protoc person.proto
+find . -name "*.proto" -type f -exec protoc -I=./protoc --python_out=./protoc {} \;
 ```
 
 ## C++ code example
@@ -300,7 +309,7 @@ std::cout << "[ PARSE ][ FROM_ISTREAM ]: " << addressbook_stream.DebugString() <
 
 </details>
 
-### Ouput to `char*`
+### ouput to `char*`
 
 <details>
     <summary>Protobuf Serialize example!</summary>
