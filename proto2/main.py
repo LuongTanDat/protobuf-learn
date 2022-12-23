@@ -36,6 +36,7 @@ def example2():
     person03.name = "Do Thu An"
 
     print(address_book)
+    return address_book
 
 
 def example3():
@@ -46,6 +47,7 @@ def example3():
     person.phone_type = phone_type_pb.MOBILE
 
     print(person)
+    return person
 
 
 def example4():
@@ -58,11 +60,26 @@ def example4():
     person01.age = 20
     person01.id = 20010001
 
-    print(person01)
+    # print(person01)
+    return person01
 
 
 if __name__ == "__main__":
     # example1()
     # example2()
     # example3()
-    example4()
+    person01 = example4()
+
+    # Write the new address book back to disk.
+    with open("build/data.pb", "wb") as fw:
+        fw.write(person01.SerializeToString())
+        print(person01.SerializeToString())
+
+    # Read the existing address book.
+    person02 = person2_pb.Person()
+    try:
+        with open("build/data.pb", "rb") as fr:
+            person02.ParseFromString(fr.read())
+            print(person02)
+    except IOError:
+        print(f"{'build/data.pb'}: File not found.  Creating a new file.")

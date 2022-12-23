@@ -38,6 +38,7 @@ def example2():
     person03.name = "Do Thu An"
 
     print(address_book)
+    return address_book
 
 
 def example3():
@@ -48,6 +49,7 @@ def example3():
     person.phone_type = phone_type_pb.MOBILE
 
     print(person)
+    return person
 
 
 def example4():
@@ -61,6 +63,7 @@ def example4():
     person01.id = 20010001
 
     print(person01)
+    return person01
 
 
 def example5():
@@ -90,11 +93,26 @@ def example5():
     phone_number.type = leimao_addressbook_pb.Person.WORK
     person02.last_updated.CopyFrom(timestamp.Timestamp(seconds=int(time.time())))
 
-    print(address_book)
+    # print(address_book)
+    return address_book
 
 if __name__ == "__main__":
     # example1()
     # example2()
     # example3()
     # example4()
-    example5()
+    address_book = example5()
+    
+    # Write the new address book back to disk.
+    with open("build/data.pb", "wb") as fw:
+        fw.write(address_book.SerializeToString())
+        print(address_book.SerializeToString())
+
+    # Read the existing address book.
+    address_book02 = leimao_addressbook_pb.AddressBook()
+    try:
+        with open("build/data.pb", "rb") as fr:
+            address_book02.ParseFromString(fr.read())
+            print(address_book02)
+    except IOError:
+        print(f"{'build/data.pb'}: File not found.  Creating a new file.")
