@@ -14,11 +14,14 @@ date::module::Person example4();
 
 int main(int argc, char **argv)
 {
-    // example1();
-    // example2();
-    // example3();
+    example1();
+    example2();
+    example3();
     date::module::Person person = example4();
     std::cout << "[ DEBUG ]: \n" << person.DebugString() << std::endl;
+
+    // Optional:  Delete all global objects allocated by libprotobuf.
+    google::protobuf::ShutdownProtobufLibrary();
 
     return EXIT_SUCCESS;
 }
