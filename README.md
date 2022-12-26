@@ -44,7 +44,6 @@ $ protoc --version
 libprotoc 3.17.1
 ```
 
-
 ## [proto2](proto2/)
 
 ## [proto3](proto3/)
