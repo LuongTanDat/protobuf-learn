@@ -31,6 +31,7 @@ RUN cd /tmp && \
     apt install -y autoconf automake libtool curl make g++ unzip && \
     wget https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-all-${PROTOBUF_VERSION}.tar.gz && \
     tar xvzf protobuf-all-${PROTOBUF_VERSION}.tar.gz && \
+    rm -rf protobuf-all-${PROTOBUF_VERSION}.tar.gz && \
     cd protobuf-${PROTOBUF_VERSION} && \
     ./configure && \
     make -j${NUM_JOBS} && \
