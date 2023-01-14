@@ -27,6 +27,17 @@ sudo make install
 sudo ldconfig
 ```
 
+### Install Python Runtime from source code
+
+```bash
+python3 -m pip install tzdata==2022.5
+cd python && \
+    python3 setup.py build && \
+    python3 setup.py test && \
+    python3 setup.py install && \
+    python3 -m pip install .
+```
+
 ### Dockerfile
 
 https://github.com/leimao/Protocol-Buffer-Examples/blob/master/docker/protobuf.Dockerfile
